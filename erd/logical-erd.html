@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CST2102 Final Project - Hospital ERD - Group 7</title>
+  </head>
+  <body>
+	<!-- Do not change anything before this line -->
+	<div class="mermaid">
+---
+title: CST2102 Final Project - Hospital Database ERD (Group 7)
+---
+erDiagram
+
+    Department {
+        INT DepartmentID PK
+        VARCHAR DepartmentName
+        VARCHAR Location
+        VARCHAR PhoneExtension
+    }
+
+    Patient {
+        INT PatientID PK
+        VARCHAR FirstName
+        VARCHAR LastName
+        DATE DateOfBirth
+        VARCHAR Gender
+        VARCHAR Address
+        VARCHAR PhoneNumber
+        VARCHAR Email
+        VARCHAR EmergencyContactName
+        VARCHAR EmergencyContactPhone
+    }
+
+    Doctor {
+        INT DoctorID PK
+        VARCHAR FirstName
+        VARCHAR LastName
+        VARCHAR Specialization
+        VARCHAR PhoneNumber
+        VARCHAR Email
+        INT DepartmentID FK
+        VARCHAR Availability
+    }
+
+    Medicine {
+        INT MedicineID PK
+        VARCHAR MedicineName
+        VARCHAR Manufacturer
+        INT StockQuantity
+        DECIMAL Price
+    }
+
+    Staff {
+        INT StaffID PK
+        VARCHAR FirstName
+        VARCHAR LastName
+        VARCHAR Role
+        INT DepartmentID FK
+        VARCHAR PhoneNumber
+        VARCHAR Email
+        VARCHAR ShiftHours
+    }
+
+    Room {
+        INT RoomID PK
+        VARCHAR RoomNumber
+        INT DepartmentID FK
+        VARCHAR RoomType
+        VARCHAR AvailabilityStatus
+    }
+
+    Appointment {
+        INT AppointmentID PK
+        INT PatientID FK
+        INT DoctorID FK
+        INT DepartmentID FK
+        DATE AppointmentDate
+        TIME AppointmentTime
+        VARCHAR Status
+    }
+
+    MedicalRecord {
+        INT RecordID PK
+        INT PatientID FK
+        INT DoctorID FK
+        DATE VisitDate
+        VARCHAR Diagnosis
+        VARCHAR TreatmentPlan
+        VARCHAR Prescription
+    }
+
+    Prescription {
+        INT PrescriptionID PK
+        INT RecordID FK
+        INT MedicineID FK
+        VARCHAR Dosage
+        VARCHAR Frequency
+        VARCHAR Duration
+    }
+
+    Billing {
+        INT BillingID PK
+        INT PatientID FK
+        DECIMAL TotalAmount
+        VARCHAR PaymentStatus
+        DATE PaymentDate
+        VARCHAR PaymentMethod
+    }
+
+    RoomAssignment {
+        INT AssignmentID PK
+        INT RoomID FK
+        INT PatientID FK
+        DATE AdmissionDate
+        DATE DischargeDate
+    }
+
+    Department ||--o{ Doctor         : "employs"
+    Department ||--o{ Staff          : "employs"
+    Department ||--o{ Room           : "contains"
+    Department ||--o{ Appointment    : "hosts"
+    Patient    ||--o{ Appointment    : "books"
+    Patient    ||--o{ MedicalRecord  : "has"
+    Patient    ||--o{ Billing        : "receives"
+    Patient    ||--o{ RoomAssignment : "assigned to"
+    Doctor     ||--o{ Appointment    : "conducts"
+    Doctor     ||--o{ MedicalRecord  : "creates"
+    MedicalRecord ||--o{ Prescription : "generates"
+    Medicine   ||--o{ Prescription   : "prescribed in"
+    Room       ||--o{ RoomAssignment : "used in"
+	</div>
+	<!-- Do not change anything after this line -->
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+  </body>
+</html>

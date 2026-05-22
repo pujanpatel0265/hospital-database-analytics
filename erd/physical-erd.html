@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hospital ERD - Group 7</title>
+
+  <!-- Mermaid CDN -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .mermaid {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Hospital Database ERD</h1>
+
+<div class="mermaid">
+erDiagram
+
+    Department {
+        INT DepartmentID PK
+        VARCHAR DepartmentName
+        VARCHAR Location
+        VARCHAR PhoneExtension
+    }
+
+    Patient {
+        INT PatientID PK
+        VARCHAR FirstName
+        VARCHAR LastName
+        DATE DateOfBirth
+        VARCHAR Gender
+        VARCHAR Address
+        VARCHAR PhoneNumber
+        VARCHAR Email
+        VARCHAR EmergencyContactName
+        VARCHAR EmergencyContactPhone
+    }
+
+    Doctor {
+        INT DoctorID PK
+        VARCHAR FirstName
+        VARCHAR LastName
+        VARCHAR Specialization
+        VARCHAR PhoneNumber
+        VARCHAR Email
+        INT DepartmentID FK
+        VARCHAR Availability
+    }
+
+    Medicine {
+        INT MedicineID PK
+        VARCHAR MedicineName
+        VARCHAR Manufacturer
+        INT StockQuantity
+        DECIMAL Price
+    }
+
+    Staff {
+        INT StaffID PK
+        VARCHAR FirstName
+        VARCHAR LastName
+        VARCHAR Role
+        INT DepartmentID FK
+        VARCHAR PhoneNumber
+        VARCHAR Email
+        VARCHAR ShiftHours
+    }
+
+    Room {
+        INT RoomID PK
+        VARCHAR RoomNumber
+        INT DepartmentID FK
+        VARCHAR RoomType
+        VARCHAR AvailabilityStatus
+    }
+
+    Appointment {
+        INT AppointmentID PK
+        INT PatientID FK
+        INT DoctorID FK
+        INT DepartmentID FK
+        DATE AppointmentDate
+        TIME AppointmentTime
+        VARCHAR Status
+    }
+
+    MedicalRecord {
+        INT RecordID PK
+        INT PatientID FK
+        INT DoctorID FK
+        DATE VisitDate
+        VARCHAR Diagnosis
+        VARCHAR TreatmentPlan
+        VARCHAR Prescription
+    }
+
+    Prescription {
+        INT PrescriptionID PK
+        INT RecordID FK
+        INT MedicineID FK
+        VARCHAR Dosage
+        VARCHAR Frequency
+        VARCHAR Duration
+    }
+
+    Billing {
+        INT BillingID PK
+        INT PatientID FK
+        DECIMAL TotalAmount
+        VARCHAR PaymentStatus
+        DATE PaymentDate
+        VARCHAR PaymentMethod
+    }
+
+    RoomAssignment {
+        INT AssignmentID PK
+        INT RoomID FK
+        INT PatientID FK
+        DATE AdmissionDate
+        DATE DischargeDate
+    }
+
+    Department ||--o{ Doctor         : employs
+    Department ||--o{ Staff          : employs
+    Department ||--o{ Room           : contains
+    Department ||--o{ Appointment    : hosts
+    Patient    ||--o{ Appointment    : books
+    Patient    ||--o{ MedicalRecord  : has
+    Patient    ||--o{ Billing        : receives
+    Patient    ||--o{ RoomAssignment : assigned_to
+    Doctor     ||--o{ Appointment    : conducts
+    Doctor     ||--o{ MedicalRecord  : creates
+    MedicalRecord ||--o{ Prescription : generates
+    Medicine   ||--o{ Prescription   : prescribed_in
+    Room       ||--o{ RoomAssignment : used_in
+
+</div>
+
+</body>
+</html>
